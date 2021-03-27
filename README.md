@@ -31,8 +31,9 @@ Ah, another label, if a label is the ending label, then, simply point to.
 
 [!choice_two]
 
-This will directly go to choice_one after we show a picture, you can add labels with images by using the
-! character.
+; This will directly go to choice_one after we show a picture, you can add labels with images by using the ! character.
+
+image_name.png
 
 -> choice_two 
 ```
