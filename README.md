@@ -35,5 +35,5 @@ Ah, another label, if a label is the ending label, then, simply point to.
 
 image_name.png
 
--> choice_two 
+: choice_two 
 ```
