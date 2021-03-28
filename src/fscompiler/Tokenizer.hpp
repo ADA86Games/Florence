@@ -1,5 +1,8 @@
+#ifndef FLORENCE_TOKENIZER_HPP
+#define FLORENCE_TOKENIZER_HPP
 #include<string>
-#include "TokenQueue.hpp"
+#include<queue>
+#include "Tokens.hpp"
 #include "ErrorLogger.hpp"
 #include "FlorenceError.hpp"
 
@@ -10,10 +13,11 @@
 class Tokenizer {
 	private:
 	std::string source_code_; /** Source code to traverse. */
-	TokenQueue token_queue_; /** Token queue to emit tokens to. */
+	std::queue<Tokens::Token> token_queue_; /** Token queue to emit tokens to. */
 	int current_line_; /** Current line the tokenizer is in. */
-	int current_row_; /** Current row the tokenizer is in. */
-	const ErrorLogger &logger_; /** Error Logger to log errors. */
+	int current_col_; /** Current row the tokenizer is in. */
+	int current_char_; /** Current character */
+	ErrorLogger *logger_; /** Error Logger to log errors. */
 	
 	/**
 	* Emit a BlockToken. This represents a string inside
@@ -63,6 +67,14 @@ class Tokenizer {
 	* @return the string.
 	*/
 	std::string get_string(const char *terminating_characters, const char *invalid_characters);
+
+	/**
+	 * Get a string from the current position without any invalid characters.
+	 *
+	 * @param terminating_characters: Characters that terminate a string.
+	 * @return the string.
+	 */
+	std::string get_string(const char *terminating_characters);
 	
 	/**
 	* Dequeue the next character.
@@ -77,6 +89,11 @@ class Tokenizer {
 	* @return the nexet character
 	*/
 	char peek();
+
+	/**
+	 * Rewind the queue back.
+	 */
+	inline void rewind();
 	
 	public:
 	/**
@@ -84,12 +101,18 @@ class Tokenizer {
 	*
 	* @param source_code: Source code of the program.
 	*/
-	Tokenizer(std::string &source_code) : source_code_(source_code);
+	Tokenizer(std::string &source_code, ErrorLogger *logger) : source_code_(source_code), logger_(logger) {
+		this->current_char_ = 0;
+		this->current_line_ = 0;
+		this->current_col_ = 0;
+	};
+	
 	/**
 	* Tokenize the source code and return the
 	* 	token queue.
 	*
 	* @return: the queue containing the tokens.
 	*/
-	TokenQueue tokenize();
-}
+	std::queue<Tokens::Token> tokenize();
+};
+#endif // FLORENCE_TOKENIZER_HPP

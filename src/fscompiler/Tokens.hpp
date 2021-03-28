@@ -3,6 +3,8 @@
 * @author Ambertide
 * This module contains token types.
 */
+#ifndef FLORENCE_TOKENS_HPP
+#define FLORENCE_TOKENS_HPP
 #include <string>
 
 namespace Tokens {
@@ -71,3 +73,4 @@ namespace Tokens {
 		std::string value; /** Value of the variable. */
 	};
 };
+#endif // FLORENCE_TOKENS_HPP

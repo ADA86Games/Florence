@@ -14,4 +14,11 @@ class ErrorLogger {
 	* @param error_message: Error message to emit.
 	*/
 	void emit_error(FlorenceError::Error error_type, int row, int column, std::string error_message);
-}
+	
+	/**
+	 * Return if an error has occurred.
+	 *
+	 * @return True if an error has occurred.
+	 */
+	inline bool has_error_occurred();
+};

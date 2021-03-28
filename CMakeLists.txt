@@ -6,4 +6,5 @@ project(Florence)
 add_subdirectory(src)
 
 # add the executable
-add_executable(florence florence.c)
+add_executable(florence src/florence.c)
+target_link_libraries(florence fscompiler)
