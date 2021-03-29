@@ -1,7 +1,7 @@
 #ifndef FLORENCE_ERROR_HPP
 #define FLORENCE_ERROR_HPP
 
-namespace FlorenceError { 
+namespace Florence::FSCompiler::FlorenceError { 
 	enum Error {
 		UNEXPECTED_LEXEME
 	};

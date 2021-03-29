@@ -44,7 +44,7 @@ main_menu:
         lea     ax, [introduction]
         call    print
         lea     ax, [about]
-        lea     bx, [start_label]
+        lea     bx, [start_section]
         lea     cx, [exit]
         jmp     choose
 

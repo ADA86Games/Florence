@@ -1,14 +1,3 @@
-# Florence Engine
-
-Florence is a game engine that can create choose your own adventure DOS games.
-Games written for the Florence Engine uses a small, simple scripting language, called FlorenceScript.
-
-## FlorenceScript
-
-FlorenceScript is used to handle the flow of the game and to show pictures. Below is the small FlorenceScript
-file that shows us the language features.
-
-```
 > exit_message: A message.
 > about_message: An about message.
 
@@ -26,7 +15,7 @@ sign, for instance this won't be preserved. Neither will the new lines before yo
 
 Ah, another label, if a label is the ending label, then, simply point to.
 
--> exit
+: exit
 
 ; Exit is a global label, directions such as this just direct you to the next label.
 
@@ -37,4 +26,3 @@ Ah, another label, if a label is the ending label, then, simply point to.
 image_name.png
 
 : choice_two 
-```

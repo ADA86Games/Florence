@@ -7,7 +7,7 @@
 #define FLORENCE_TOKENS_HPP
 #include <string>
 
-namespace Tokens {
+namespace Florence::FSCompiler::Tokens {
 	enum TokenType {
 		LABEL, // Used by section labels.
 		DIRECT, // Used by direct jumps.

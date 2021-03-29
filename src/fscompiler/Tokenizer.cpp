@@ -12,17 +12,18 @@ inline bool one_of(char c, std::string chars) {
     return chars.find(c) != std::string::npos; // https://stackoverflow.com/a/43629706/6663851
 }
 
-void Tokenizer::emit_block() {
+void Florence::FSCompiler::Tokenizer::emit_block() {
     char next_char; // Traversing char.
-    std::string block_text = ""; // String to append to.
-    Tokens::BlockToken block;  // Block token object to generate.
-    block.line = this->current_line_; // Set token location.
-    block.location = this->current_col_;
-    block.token_type = Tokens::TokenType::BLOCK; // Set type.
+    std::string block_text; // String to append to.
+    auto *block = new Tokens::BlockToken();  // Block token object to generate.
+    block->line = this->current_line_; // Set token location.
+    block->location = this->current_col_;
+    block->token_type = Tokens::TokenType::BLOCK; // Set type.
     rewind(); // Go back a single character.
     while(true) {
         if (peek() == '^') { // If special ignore character.
             dequeue(); // Toss away the character.
+            dequeue(); // Toss away the next character as well.
         }
         next_char = dequeue();
         if (next_char == '\n' && one_of(peek(), "*:[>;")) { // Break condition.
@@ -30,67 +31,67 @@ void Tokenizer::emit_block() {
         }
         block_text += next_char;
     }
-    block.text = block_text;
+    block->text = block_text;
     token_queue_.push(block); // Enqueue the token.
 }
 
-void Tokenizer::emit_comment() {
-    while (dequeue() != '\n'); // Toss away all.
-    dequeue(); // Toss away the EOL. 
+void Florence::FSCompiler::Tokenizer::emit_comment() {
+    while (dequeue() != '\n'); // Toss away all including EOL.
 }
 
-void Tokenizer::emit_global() {
-    Tokens::GlobalToken global_token;
-    global_token.line = this->current_line_;
-    global_token.location = this->current_col_;
+void Florence::FSCompiler::Tokenizer::emit_global() {
+    auto *global_token = new Tokens::GlobalToken();
+    global_token->line = this->current_line_;
+    global_token->location = this->current_col_;
     std::string key = get_string(":", "\n");
     if (this->logger_->has_error_occurred()) { // Stop if any error has occurred.
         return;
     }
     std::string value = get_string("\n");
     /** Set variables. */
-    global_token.token_type = Tokens::TokenType::GLOBAL; 
-    global_token.key = key;
-    global_token.value = value;
+    global_token->token_type = Tokens::TokenType::GLOBAL;
+    global_token->key = key;
+    global_token->value = value;
     this->token_queue_.push(global_token); // Enqueue for compilation.
 }
 
-void Tokenizer::emit_label() {
-    Tokens::LabelToken label;
-    label.line = this->current_line_; // Current location
-    label.location = this->current_col_; // Is the label location.
-    label.token_type = Tokens::TokenType::LABEL;
-    label.is_image = false; // Initially false.
+void Florence::FSCompiler::Tokenizer::emit_label() {
+    auto *label = new Tokens::LabelToken();
+    label->line = this->current_line_; // Current location
+    label->location = this->current_col_; // Is the label location.
+    label->token_type = Tokens::TokenType::LABEL;
+    label->is_image = false; // Initially false.
     if (peek() == '!') { // Indicates image label.
-        label.is_image = true; // Set to true.
+        label->is_image = true; // Set to true.
         dequeue(); // Discard !.
     }
-    label.label = get_string("]", "\n"); // Get the label text.
+    label->label = get_string("]", "\n"); // Get the label text.
+    this->token_queue_.push(label);  // Enqueue a label token.
 }
 
-void Tokenizer::emit_direct() {
-    Tokens::DirectToken token;
-    token.line = this->current_line_;
-    token.location = this->current_col_;
-    token.token_type = Tokens::TokenType::DIRECT;
-    token.direction = get_string("\n"); // Get the jump label.
+void Florence::FSCompiler::Tokenizer::emit_direct() {
+    auto *token = new Tokens::DirectToken();
+    token->line = this->current_line_;
+    token->location = this->current_col_;
+    token->token_type = Tokens::TokenType::DIRECT;
+    token->direction = get_string("\n"); // Get the jump label.
     token_queue_.push(token); // Push the token.
 }
 
-void Tokenizer::emit_choice() {
-    Tokens::ChoiceToken token;
-    token.line = this->current_line_;
-    token.location = this->current_col_;
-    token.token_type = Tokens::TokenType::CHOICE;
-    token.choice = get_string("\n");
+void Florence::FSCompiler::Tokenizer::emit_choice() {
+    auto *token = new Tokens::ChoiceToken();
+    token->line = this->current_line_;
+    token->location = this->current_col_;
+    token->token_type = Tokens::TokenType::CHOICE;
+    token->choice = get_string("\n");
     token_queue_.push(token); // Push the token.
 }
 
-void Tokenizer::emit_error(FlorenceError::Error error) {
+void Florence::FSCompiler::Tokenizer::emit_error(FlorenceError::Error error) {
     this->logger_->emit_error(error, this->current_line_, this->current_col_, "Unexpected character.");
 }
 
-std::string Tokenizer::get_string(const char *terminating_characters, const char *invalid_characters) {
+std::string Florence::FSCompiler::Tokenizer::get_string(const char *terminating_characters, const char *invalid_characters) {
     std::string str_ = "";
     char c;
     while (true) {
@@ -106,11 +107,11 @@ std::string Tokenizer::get_string(const char *terminating_characters, const char
     return str_;
 }
 
-std::string Tokenizer::get_string(const char *terminating_characters) {
+std::string Florence::FSCompiler::Tokenizer::get_string(const char *terminating_characters) {
     return get_string(terminating_characters, ""); // Call get string without error characters.
 }
 
-char Tokenizer::dequeue() {
+char Florence::FSCompiler::Tokenizer::dequeue() {
     char character = peek();
     if (character != '\0' && character != '\n') { // If not at end of line or code.
         this->current_char_++; // Increment char.
@@ -123,19 +124,19 @@ char Tokenizer::dequeue() {
     return character; // Return the character.
 }
 
-char Tokenizer::peek() {
+char Florence::FSCompiler::Tokenizer::peek() {
     return this->source_code_[this->current_char_]; // Get the current character.
 }
 
-inline void Tokenizer::rewind() {
+inline void Florence::FSCompiler::Tokenizer::rewind() {
     this->current_char_--; // Go back.
     this->current_line_--; // This only occurs in blocks.
 }
 
-std::queue<Tokens::Token> Tokenizer::tokenize() {
-    while (!peek() && !this->logger_->has_error_occurred()) {
+std::queue<Florence::FSCompiler::Tokens::Token*> Florence::FSCompiler::Tokenizer::tokenize() {
+    while (peek() && !this->logger_->has_error_occurred()) {
         char next_char = dequeue();
-        switch (next_char) { // Switch case on syntaxtic elements.
+        switch (next_char) { // Switch case on syntactic elements.
         case '*': // Depending on the first character of the line.
             emit_choice();
             break;
@@ -151,6 +152,8 @@ std::queue<Tokens::Token> Tokenizer::tokenize() {
         case '>':
             emit_global();
             break;
+        case '\n':
+            break; // Ignore the newline.
         default:
             emit_block();
             break;

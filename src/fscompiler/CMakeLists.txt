@@ -1,2 +1,2 @@
 FILE(GLOB fscompiler_sources *.cpp *.hpp)
-ADD_LIBRARY(fscompiler SHARED ${fscompiler_sources})
+ADD_LIBRARY(fscompiler ${fscompiler_sources})
