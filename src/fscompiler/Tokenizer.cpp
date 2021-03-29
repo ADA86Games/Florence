@@ -55,9 +55,36 @@ void Tokenizer::emit_global() {
     this->token_queue_.push(global_token); // Enqueue for compilation.
 }
 
-void Tokenizer::emit_label() {} // TODO: Implement this.
-void Tokenizer::emit_direct() {} // TODO: Implement this.
-void Tokenizer::emit_choice() {} // TODO: Implement this.
+void Tokenizer::emit_label() {
+    Tokens::LabelToken label;
+    label.line = this->current_line_; // Current location
+    label.location = this->current_col_; // Is the label location.
+    label.token_type = Tokens::TokenType::LABEL;
+    label.is_image = false; // Initially false.
+    if (peek() == '!') { // Indicates image label.
+        label.is_image = true; // Set to true.
+        dequeue(); // Discard !.
+    }
+    label.label = get_string("]", "\n"); // Get the label text.
+}
+
+void Tokenizer::emit_direct() {
+    Tokens::DirectToken token;
+    token.line = this->current_line_;
+    token.location = this->current_col_;
+    token.token_type = Tokens::TokenType::DIRECT;
+    token.direction = get_string("\n"); // Get the jump label.
+    token_queue_.push(token); // Push the token.
+}
+
+void Tokenizer::emit_choice() {
+    Tokens::ChoiceToken token;
+    token.line = this->current_line_;
+    token.location = this->current_col_;
+    token.token_type = Tokens::TokenType::CHOICE;
+    token.choice = get_string("\n");
+    token_queue_.push(token); // Push the token.
+}
 
 void Tokenizer::emit_error(FlorenceError::Error error) {
     this->logger_->emit_error(error, this->current_line_, this->current_col_, "Unexpected character.");
@@ -66,14 +93,16 @@ void Tokenizer::emit_error(FlorenceError::Error error) {
 std::string Tokenizer::get_string(const char *terminating_characters, const char *invalid_characters) {
     std::string str_ = "";
     char c;
-    do {
+    while (true) {
         c = dequeue();
         if (one_of(c, invalid_characters)) {
             emit_error(FlorenceError::UNEXPECTED_LEXEME); // Emit error if character is unexpected.
             return "";
+        } else if(one_of(c, terminating_characters)) {
+            return str_; // Terminating character is not included.
         }
         str_ += c; // Append to the string.
-    } while (!one_of(c, terminating_characters));
+    }
     return str_;
 }
 

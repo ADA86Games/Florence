@@ -61,7 +61,7 @@ class Tokenizer {
 	
 	/**
 	* Get a string from the current position.
-	*
+	*	the terminating character is not included.
 	* @param terminating_characters: Characters that terminate a string.
 	* @param invalid_characters: If these characters are seen, emit an error.
 	* @return the string.
@@ -70,6 +70,7 @@ class Tokenizer {
 
 	/**
 	 * Get a string from the current position without any invalid characters.
+	 *	the terminating character is not included.
 	 *
 	 * @param terminating_characters: Characters that terminate a string.
 	 * @return the string.
@@ -86,7 +87,7 @@ class Tokenizer {
 	/**
 	* Peek to see the next characters, without removing it.
 	*
-	* @return the nexet character
+	* @return the next character
 	*/
 	char peek();
 
