@@ -63,8 +63,23 @@ void Tokenizer::emit_error(FlorenceError::Error error) {
     this->logger_->emit_error(error, this->current_line_, this->current_col_, "Unexpected character.");
 }
 
-std::string Tokenizer::get_string(const char *terminating_characters, const char *invalid_characters) {} // TODO: Implement this.
-std::string Tokenizer::get_string(const char *terminating_characters) {} // TODO: Implement this.
+std::string Tokenizer::get_string(const char *terminating_characters, const char *invalid_characters) {
+    std::string str_ = "";
+    char c;
+    do {
+        c = dequeue();
+        if (one_of(c, invalid_characters)) {
+            emit_error(FlorenceError::UNEXPECTED_LEXEME); // Emit error if character is unexpected.
+            return "";
+        }
+        str_ += c; // Append to the string.
+    } while (!one_of(c, terminating_characters));
+    return str_;
+}
+
+std::string Tokenizer::get_string(const char *terminating_characters) {
+    return get_string(terminating_characters, ""); // Call get string without error characters.
+}
 
 char Tokenizer::dequeue() {
     char character = peek();

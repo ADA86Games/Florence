@@ -1,6 +1,6 @@
 ; MIT License - ADA86Games 
 ; Ege Özkan
-; Source code to be included to draw images in Assembly.
+; Source code to be included to get user input Assembly.
 ; Written for FASM, uses DOS system calls.
 
 

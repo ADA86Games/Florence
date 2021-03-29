@@ -1,6 +1,6 @@
 ; MIT License - ADA86Games 
 ; Ege Özkan
-; Source code to be included to draw images in Assembly.
+; Source code to be included for general utilities.
 ; Written for FASM, uses DOS system calls.
 
 
@@ -16,7 +16,7 @@
 ; ========================================
 
 
-; CHOOSE
+; SLEEP
 ;
 ; DESCRIPTION
 ; Makes the program execution stop for an amount of time; 	
