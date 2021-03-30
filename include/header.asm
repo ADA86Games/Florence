@@ -55,12 +55,3 @@ about:
         call    print
         jmp     main_menu
 
-; The special exit label.
-exit:
-        
-        lea     ax, [exit_message]
-        call    print
-        mov     ah, 4CH
-        int     21H
-
-

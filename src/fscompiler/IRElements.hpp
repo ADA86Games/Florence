@@ -29,9 +29,17 @@ namespace Florence::FSCompiler::IRElements {
     };
 
     /**
-     * Representation of a section in the game.
+     * IR Element representing a section.
      */
     struct SectionIRElement : IRElement {
+        Tokens::LabelToken *section_label; /** Label of the section. */
+        std::string text; /** Text, or file handler, of the section. */
+    };
+
+    /**
+     * Representation of a text section in the game.
+     */
+    struct TextSectionIRElement : SectionIRElement {
         Tokens::LabelToken *section_label; // The label of a section.
         std::string text;
         std::queue<Tokens::ChoiceToken*> choices; // The choices of the section.
@@ -41,7 +49,7 @@ namespace Florence::FSCompiler::IRElements {
      * A section that shows an image, waits for a keypress
      *  and later progresses.
      */
-    struct ImageSectionIRElement : IRElement {
+    struct ImageSectionIRElement : SectionIRElement {
         Tokens::DirectToken *direct; // Section to jump to after showing image.
         Tokens::LabelToken *section_label; // The label of a section.
         std::string filename; // Name of the file.
@@ -50,7 +58,7 @@ namespace Florence::FSCompiler::IRElements {
     /**
      * A section that prints some text and then immediately progresses.
      */
-    struct DirectSectionIRElement : IRElement {
+    struct DirectSectionIRElement : SectionIRElement {
         Tokens::DirectToken *direct; // Section to jump to directly.
         std::string text;
         Tokens::LabelToken *section_label; // Label of a section.

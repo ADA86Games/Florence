@@ -34,7 +34,7 @@ void Parser::parse_section() {
         parse_image_section(); // Parse an image section.
         return;
     }
-    auto *section = new IRElements::SectionIRElement();
+    auto *section = new IRElements::TextSectionIRElement();
     section->section_label = (Tokens::LabelToken*) dequeue();
     section->element_type = IRElements::IRElementType::SECTION_IR_ELEMENT;
     while (peek() != nullptr && peek()->token_type == Tokens::TokenType::BLOCK) { // If it is a string block.
