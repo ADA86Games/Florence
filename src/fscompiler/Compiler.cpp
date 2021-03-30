@@ -49,13 +49,13 @@ bool is_reserved(std::string name) {
 }
 
 /* Compiles to the data segment. */
-void Compiler::compile_element(Tokens::GlobalToken *token) {
+void Compiler::compile_element(Tokens::GlobalToken *token, bool add_suffix) {
     if (is_reserved(token->key)) {
         // Emit an error for the reserved keyword usage.
         emit_error(FlorenceError::Error::COMPILER_RESERVED, token->line, token->location, "This keyword is reserved.");
     } else {
         this->data_segment_ +=
-                token->key + "_text" + "\tdb\t" + convert_string(token->value) + "\n"; // Add to data segment.
+                token->key + (add_suffix ? "_text": "") + "\tdb\t" + convert_string(token->value) + "\n"; // Add to data segment.
     }
     delete token; // Free the token.
 }
@@ -65,7 +65,7 @@ void Compiler::compile_element(IRElements::GlobalsIRElement *element) {
     while (!element->globals.empty()) {
         global_token = element->globals.front();
         element->globals.pop(); // Dequeue the element.
-        compile_element(global_token); // Compile the token.
+        compile_element(global_token, false); // Compile the token.
     }
 }
 
@@ -79,7 +79,7 @@ void Compiler::compile_element(IRElements::SectionIRElement *element) {
     auto *global_token = new Tokens::GlobalToken {Tokens::TokenType::GLOBAL, element->section_label->line,
                                                   element->section_label->location, element->section_label->label,
                                                   element->text}; // Convert to global token to reuse compile_element.
-    compile_element(global_token);
+    compile_element(global_token, true);
     this->labels_.insert(element->section_label->label); // Add the label to the labels set.
 }
 
@@ -124,7 +124,7 @@ void Compiler::compile_element(IRElements::DirectSectionIRElement *element) {
     std::string  label_name = element->section_label->label; // Get the label name.
     generated_assembly += label_name + ":\n"; // Generate the label.
     generated_assembly += "\tlea\tax, [" + label_name + "_text]\n"; // Print the text.
-    generated_assembly += "\tcall\tprint"; // Print the text.
+    generated_assembly += "\tcall\tprint\n"; // Print the text.
     generated_assembly += "\tjmp\t" + element->direct->direction + "\n"; // Jump to next direction.
     delete element;
     this->logic_segment_ += generated_assembly;

@@ -29,6 +29,11 @@
 ; @BX: Memory location to the user's second choice.
 ; @CX: Memory location to the user's third choice.
 choose:
+	push	ax	; Preserve the original
+	push	bx	; Registers.
+	push	cx
+	push	dx
+
         lea     dx, [input] ; Print the input message
         mov     ah, 9 ; The print system call.
         int     21h 

@@ -61,15 +61,18 @@ draw_image:
         mov     ah, 3Eh ; Close file.
         int     21h
  
+
 write_screen:
         mov     al, [ds:di] ; Get the next pixel
         mov     byte[es:bx], al    ; Write pixel.
         inc     bx              ; Increment ax.
         inc     di
         cmp     bx, 0f9ffH      ; Check if we wrote enough.
-        jge     loop_to
+        jge     write_screen_ret
         jmp     write_screen
-        ret
+
+write_screen_ret:
+	ret ; Return from the routine.
 
 
 screen_buffer   rb      64000

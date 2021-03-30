@@ -4,7 +4,7 @@
 #include "utils/fileio.hpp"
 #include "fscompiler/Parser.hpp"
 #include "fscompiler/Compiler.hpp"
-
+#include "linker.hpp"
 
 using namespace Florence::FSCompiler;
 
@@ -72,5 +72,8 @@ int main() {
     auto *parser = new Parser(tokens, logger);
     std::queue<IRElements::IRElement*> ir = parser->parse();
     auto *compiler = new Compiler(ir, logger);
-    std::cout << compiler->compile();
+    std::string source_code = compiler->compile();
+    std::string generated_assembly = Florence::Linker::link(source_code);
+    Florence::Utils::write_source("../output.asm", generated_assembly);
+
 }

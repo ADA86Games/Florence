@@ -8,5 +8,5 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(src)
 
 # add the executable
-add_executable(florence src/florence.cpp)
+add_executable(florence src/florence.cpp src/linker.cpp src/linker.hpp)
 target_link_libraries(florence fscompiler futil)

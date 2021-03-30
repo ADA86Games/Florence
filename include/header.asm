@@ -51,7 +51,7 @@ main_menu:
 ; The about game label.
 about:
         
-        lea     ax, [about_msg]
+        lea     ax, [about_message]
         call    print
         jmp     main_menu
 

@@ -14,5 +14,16 @@ std::string Florence::Utils::read_source(std::string file_name) {
     } else {
         std::cerr << "Err: File not found!.\n";
     }
+    input_file.close();
     return file_content;
+}
+
+void Florence::Utils::write_source(const std::string &file_name, const std::string &content) {
+    std::ofstream ofstream (file_name);
+    if (ofstream.is_open()) {
+        ofstream << content;
+    } else {
+        std::cerr << "Err: Write failed.\n";
+    }
+    ofstream.close();
 }

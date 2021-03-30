@@ -1,5 +1,7 @@
 > exit_message: A message.
 > about_message: An about message.
+> introduction: This must also be given
+> input: User, enter your choice.
 
 [start_section]
 
