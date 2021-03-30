@@ -45,7 +45,6 @@ int main() {
     auto *tokenizer = new Tokenizer(source, logger);
     std::queue<Tokens::Token*> tokens = tokenizer->tokenize();
     Tokens::Token *current_token;
-    std::cout << "Following script: \n" << source << "Lexically compiles to following tokens: \n";
     while (!tokens.empty()) {
         current_token = tokens.front();
         tokens.pop();
