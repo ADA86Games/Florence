@@ -21,9 +21,9 @@ Ah, another label, if a label is the ending label, then, simply point to.
 
 ; Exit is a global label, directions such as this just direct you to the next label.
 
-[!choice_two]
+[choice_two]
 
+Yet another choice!
 ; This will directly go to choice_one after we show a picture, you can add labels with images by using the ! character.
 
-image_name.png
-: choice_two 
+: exit
