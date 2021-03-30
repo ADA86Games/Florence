@@ -12,6 +12,18 @@ inline bool one_of(char c, std::string chars) {
     return chars.find(c) != std::string::npos; // https://stackoverflow.com/a/43629706/6663851
 }
 
+/**
+ * Trim space characters in the left and right of the string.
+ *
+ * @param string_ String to trim.
+ * @return The trimmed string.
+ */
+inline std::string trim_spaces(std::string string_) {
+    size_t first_char = string_.find_first_not_of(' ');
+    size_t last_char = string_.find_last_not_of(' ');
+    return string_.substr(first_char, last_char + 1);
+}
+
 void Florence::FSCompiler::Tokenizer::emit_block() {
     char next_char; // Traversing char.
     std::string block_text; // String to append to.
@@ -100,7 +112,7 @@ std::string Florence::FSCompiler::Tokenizer::get_string(const char *terminating_
             emit_error(FlorenceError::UNEXPECTED_LEXEME); // Emit error if character is unexpected.
             return "";
         } else if(one_of(c, terminating_characters)) {
-            return str_; // Terminating character is not included.
+            return trim_spaces(str_); // Terminating character is not included.
         }
         str_ += c; // Append to the string.
     }

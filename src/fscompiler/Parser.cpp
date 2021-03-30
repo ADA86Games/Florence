@@ -67,11 +67,11 @@ void Parser::parse_image_section() {
     section->section_label = (Tokens::LabelToken*) dequeue(); // Get the label.
     if (peek()->token_type == Tokens::TokenType::BLOCK) {
         auto *block_filename = ((Tokens::BlockToken *) dequeue());
-        section->filename = block_filename->text;
+        section->text = block_filename->text;
         delete block_filename; // Free the block.
     } else {
         emit_error(FlorenceError::Error::PARSER_NO_FILENAME, section->section_label->line,
-                    section->section_label->location, "Image without filename.");
+                    section->section_label->location, "Image without text.");
         return;
     }
     if (peek()->token_type != Tokens::TokenType::DIRECT) {

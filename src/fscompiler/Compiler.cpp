@@ -81,7 +81,6 @@ void Compiler::compile_element(IRElements::SectionIRElement *element) {
                                                   element->text}; // Convert to global token to reuse compile_element.
     compile_element(global_token);
     this->labels_.insert(element->section_label->label); // Add the label to the labels set.
-    delete global_token;
 }
 
 /* Compiles to the logic segment. */
@@ -145,7 +144,7 @@ void Compiler::compile_sections() {
                 compile_element((IRElements::ImageSectionIRElement *) element);
                 break;
             case IRElements::DIRECT_SECTION_IR_ELEMENT:
-                compile_element((IRElements::TextSectionIRElement *) element);
+                compile_element((IRElements::DirectSectionIRElement *) element);
                 break;
         }
     }

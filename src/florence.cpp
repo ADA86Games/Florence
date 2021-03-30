@@ -3,6 +3,8 @@
 #include "fscompiler/ErrorLogger.hpp"
 #include "utils/fileio.hpp"
 #include "fscompiler/Parser.hpp"
+#include "fscompiler/Compiler.hpp"
+
 
 using namespace Florence::FSCompiler;
 
@@ -52,7 +54,7 @@ std::string print_block(IRElements::IRElement *element) {
         case IRElements::GLOBALS_IR_ELEMENT:
             return "Global Element";
         case IRElements::SECTION_IR_ELEMENT:
-            return "Text Section with Choices Element";
+            return "Text Section with Choices Element: ";
         case IRElements::IMAGE_SECTION_IR_ELEMENT:
             return "Image Section with Direct Jump Element";
         case IRElements::DIRECT_SECTION_IR_ELEMENT:
@@ -69,10 +71,6 @@ int main() {
     std::queue<Tokens::Token*> tokens = tokenizer->tokenize();
     auto *parser = new Parser(tokens, logger);
     std::queue<IRElements::IRElement*> ir = parser->parse();
-    IRElements::IRElement *current_element;
-    while (!ir.empty()) {
-        current_element = ir.front();
-        ir.pop();
-        std::cout << print_block(current_element) << "\n";
-    }
+    auto *compiler = new Compiler(ir, logger);
+    std::cout << compiler->compile();
 }
