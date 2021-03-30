@@ -2,6 +2,7 @@
 #include "fscompiler/Tokenizer.hpp"
 #include "fscompiler/ErrorLogger.hpp"
 #include "utils/fileio.hpp"
+#include "fscompiler/Parser.hpp"
 
 using namespace Florence::FSCompiler;
 
@@ -39,15 +40,39 @@ std::string print_token(Tokens::Token *token) {
     }
 }
 
+/**
+ * Print a IRElement.
+ *
+ * @param token Pointer to the token to print.
+ * @return String representing token.
+ */
+std::string print_block(IRElements::IRElement *element) {
+    IRElements::IRElementType element_type = element->element_type;
+    switch(element_type) {
+        case IRElements::GLOBALS_IR_ELEMENT:
+            return "Global Element";
+        case IRElements::SECTION_IR_ELEMENT:
+            return "Text Section with Choices Element";
+        case IRElements::IMAGE_SECTION_IR_ELEMENT:
+            return "Image Section with Direct Jump Element";
+        case IRElements::DIRECT_SECTION_IR_ELEMENT:
+            return "Text Section with Direct Jump Element";
+        default:
+            return "Undefined Element";
+    }
+}
+
 int main() {
     std::string source = Florence::Utils::read_source("../examples/example.flrnc");
     auto *logger = new ErrorLogger();
     auto *tokenizer = new Tokenizer(source, logger);
     std::queue<Tokens::Token*> tokens = tokenizer->tokenize();
-    Tokens::Token *current_token;
-    while (!tokens.empty()) {
-        current_token = tokens.front();
-        tokens.pop();
-        std::cout << current_token->line + 1 << ", " << current_token->location + 1 << ": " << print_token(current_token) << "\n";
+    auto *parser = new Parser(tokens, logger);
+    std::queue<IRElements::IRElement*> ir = parser->parse();
+    IRElements::IRElement *current_element;
+    while (!ir.empty()) {
+        current_element = ir.front();
+        ir.pop();
+        std::cout << print_block(current_element) << "\n";
     }
 }

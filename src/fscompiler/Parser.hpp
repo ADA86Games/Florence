@@ -39,9 +39,12 @@ namespace Florence::FSCompiler {
         /**
          * Emit an error.
          *
+         * @param error: Type of the error.
+         * @param row: Row error occurs in.
+         * @param col: Column the error occurs in.
          * @param error_message: Error message.
          */
-        void emit_error(std::string error_message);
+        void emit_error(FlorenceError::Error error, int row, int col, std::string error_message);
 
         /**
          * Dequeue a token.
@@ -65,7 +68,7 @@ namespace Florence::FSCompiler {
          */
         std::queue<IRElements::IRElement*> parse();
 
-        Parser(std::queue<Tokens::Token*> token_queue) : token_queue_(token_queue) {};
+        Parser(std::queue<Tokens::Token*> token_queue, ErrorLogger *logger) : token_queue_(token_queue), error_logger_(logger) {};
         ~Parser();
     };
 };

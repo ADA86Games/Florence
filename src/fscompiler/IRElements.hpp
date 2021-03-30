@@ -44,6 +44,7 @@ namespace Florence::FSCompiler::IRElements {
     struct ImageSectionIRElement : IRElement {
         Tokens::DirectToken *direct; // Section to jump to after showing image.
         Tokens::LabelToken *section_label; // The label of a section.
+        std::string filename; // Name of the file.
     };
 
     /**

@@ -3,7 +3,10 @@
 
 namespace Florence::FSCompiler::FlorenceError { 
 	enum Error {
-		UNEXPECTED_LEXEME
+		UNEXPECTED_LEXEME,
+		PARSER_NO_FILENAME,
+		PARSER_NO_DIRECTION,
+		PARSER_NO_LABEL
 	};
 };
 
