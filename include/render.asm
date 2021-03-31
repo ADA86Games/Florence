@@ -50,7 +50,10 @@ draw_image:
 	mov	ah, 0Fh	; Get current video mode.
 	int	10h	; Saves current mode to AL.
 	mov	cl, al	; Get the display mode to cl.
-	
+	pop	ax;
+	push	cx;
+	push	ax;
+
 	mov	al, 13h	; Switch to VGA graphics.
 	call	set_graphics_mode
 
@@ -84,7 +87,8 @@ write_screen:
 write_screen_ret:
 	mov	ah, 01h	; Wait for keyboard IO.
 	int	21h	; By reading a character.
-	mov	al, cx	; Return the display mode.
+	pop	cx
+	mov	al, cl	; Return the display mode.
 	call	set_graphics_mode
 	ret 		; Return from the routine.
 
