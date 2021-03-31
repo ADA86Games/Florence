@@ -72,7 +72,9 @@ write_screen:
         jmp     write_screen
 
 write_screen_ret:
-	ret ; Return from the routine.
+	mov	ah, 01h	; Wait for keyboard IO.
+	int	21h	; By reading a character.
+	ret 		; Return from the routine.
 
 
 screen_buffer   rb      64000

@@ -97,6 +97,7 @@ void Compiler::compile_element(IRElements::TextSectionIRElement *element) {
             break;
         }
         jump_name = element->choices.front()->choice;
+        element->choices.pop();
         generated_assembly += "\tlea\t" + r + ", [" + jump_name + "]\n";
     }
     generated_assembly += "\tjmp\tchoose\n";
