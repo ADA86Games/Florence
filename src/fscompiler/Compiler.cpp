@@ -109,12 +109,8 @@ void Compiler::compile_element(IRElements::ImageSectionIRElement *element) {
     std::string generated_assembly;
     std::string label_name = element->section_label->label;
     generated_assembly += label_name + ":\n"; // Generate label.
-    generated_assembly += "\tmov\tax, 13h\n"; // Set the graphics mode to
-    generated_assembly += "\tcall\tset_graphics_mode\n"; // VGA graphics display.
     generated_assembly += "\tlea\tax, [" + label_name + "_text]\n"; // Put the file name handler.
     generated_assembly += "\tcall\tdraw_image\n"; // Call the draw image function.
-    generated_assembly += "\tmov\tax, 00h\n"; // Set the graphics mode to
-    generated_assembly += "\tcall\tset_graphics_mode\n"; // VGA Text display.
     generated_assembly += "\tjmp\t" + element->direct->direction + "\n"; // Set the jump location.
     delete element;
     this->logic_segment_ += generated_assembly;

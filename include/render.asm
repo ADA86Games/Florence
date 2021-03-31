@@ -45,14 +45,24 @@ set_graphics_mode:
 ;	formatted as a null terminated
 ;	string.
 draw_image:
-        mov     dx, ax
+	
+	push	ax	; Store ax.
+	mov	ah, 0Fh	; Get current video mode.
+	int	10h	; Saves current mode to AL.
+	mov	cl, al	; Get the display mode to cl.
+	
+	mov	al, 13h	; Switch to VGA graphics.
+	call	set_graphics_mode
+
+	pop	ax	; Restore ax.
+
+	mov     dx, ax
         mov     al, 00h ; Read file.
         mov     ah, 3Dh ; Open file
         int     21h     ; Open the file.
 
         push    ax
         mov     bx, ax  ; Get the file handle.
-        mov     cx, 64000      ; Read 320x200 bytes.
         lea     dx, [screen_buffer] ; Set the screen buffer.
         mov     ah, 3Fh ; Read data.
         int     21h
@@ -74,6 +84,8 @@ write_screen:
 write_screen_ret:
 	mov	ah, 01h	; Wait for keyboard IO.
 	int	21h	; By reading a character.
+	mov	al, cx	; Return the display mode.
+	call	set_graphics_mode
 	ret 		; Return from the routine.
 
 
