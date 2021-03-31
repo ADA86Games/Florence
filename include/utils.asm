@@ -1,4 +1,5 @@
-; MIT License - ADA86Games 
+R"(
+; MIT License - ADA86Games
 ; Ege Özkan
 ; Source code to be included for general utilities.
 ; Written for FASM, uses DOS system calls.
@@ -62,5 +63,4 @@ exit:
         call    print
         mov     ah, 4CH
         int     21H
-
-
+)"

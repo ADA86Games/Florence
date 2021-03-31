@@ -1,4 +1,5 @@
-; MIT License - ADA86Games 	
+R"(
+; MIT License - ADA86Games
 ; Ege Özkan
 ; Source code to be included to draw images in Assembly.
 ; Written for FASM, uses DOS system calls.
@@ -96,3 +97,4 @@ write_screen_ret:
 
 
 screen_buffer   rb      64000
+)"

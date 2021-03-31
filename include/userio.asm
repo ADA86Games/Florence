@@ -1,4 +1,5 @@
-; MIT License - ADA86Games 
+R"(
+; MIT License - ADA86Games
 ; Ege Özkan
 ; Source code to be included to get user input Assembly.
 ; Written for FASM, uses DOS system calls.
@@ -163,4 +164,4 @@ print_ret:
 
         ret
 
-
+)"

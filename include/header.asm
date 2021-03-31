@@ -1,4 +1,5 @@
-; MIT License - ADA86Games 
+R"(
+; MIT License - ADA86Games
 ; Ege Özkan
 ; Source code to make assembly programs compile correctly.
 ; As well as initialisation routines.
@@ -54,4 +55,4 @@ about:
         lea     ax, [about_message]
         call    print
         jmp     main_menu
-
+)"

@@ -3,8 +3,23 @@
 #include <string>
 #include <vector>
 
-const std::vector<std::string> std_lib {"../include/header.asm", "../include/render.asm",
-                                        "../include/userio.asm", "../include/utils.asm"}; // Standard library.
+static const char *header_asm =
+#include "../include/header.asm"
+;
+
+static const char *render_asm =
+#include "../include/render.asm"
+;
+
+static const char *userio_asm =
+#include "../include/userio.asm"
+;
+
+static const char *utils_asm =
+#include "../include/utils.asm"
+;
+
+static const std::vector<std::string> std_lib {header_asm, render_asm, userio_asm, utils_asm}; // Standard library.
 
 namespace Florence::Linker {
     /**
@@ -14,7 +29,7 @@ namespace Florence::Linker {
      * @param filenames Filenames of the sources to link.
      * @return the linked source code.
      */
-    std::string link(const std::string &path, const std::string & source_code, std::vector<std::string> filenames);
+    std::string link(const std::string & source_code, std::vector<std::string> filenames);
 
     /**
      * Link the source code with just the standard library.
@@ -22,7 +37,7 @@ namespace Florence::Linker {
      * @param source_code Source code to link.
      * @return The linked source code.
      */
-    std::string link(const std::string &path, const std::string & source_code);
+    std::string link(const std::string & source_code);
 }
 
 #endif //FLORENCE_LINKER_HPP
