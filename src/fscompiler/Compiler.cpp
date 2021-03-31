@@ -16,9 +16,11 @@ const std::set<std::string> reserved_labels {"exit", "main_menu", "about", "stdi
  *  and converting newlines to cr, lf pairs.
  *
  * @param string_ String to convert.
+ * @param null_terminated: If set to true, the string is null terminated rather than $.
+ *  this string type is used by some BIOS and graphics routines.
  * @return The converted string.
  */
-std::string convert_string(std::string string_) {
+std::string convert_string(std::string string_, bool null_terminated) {
     std::string converted_string = "\"";
     for (char const &c : string_) {
         switch (c) {
@@ -35,7 +37,7 @@ std::string convert_string(std::string string_) {
                 converted_string += c;
         }
     }
-    converted_string += "$\""; // $ terminated string.
+    converted_string += null_terminated ? "\", 0" : "$\""; // $ terminated string.
     return converted_string;
 }
 /**
@@ -49,13 +51,13 @@ bool is_reserved(std::string name) {
 }
 
 /* Compiles to the data segment. */
-void Compiler::compile_element(Tokens::GlobalToken *token, bool add_suffix) {
+void Compiler::compile_element(Tokens::GlobalToken *token, bool add_suffix, bool null_terminated) {
     if (is_reserved(token->key)) {
         // Emit an error for the reserved keyword usage.
         emit_error(FlorenceError::Error::COMPILER_RESERVED, token->line, token->location, "This keyword is reserved.");
     } else {
         this->data_segment_ +=
-                token->key + (add_suffix ? "_text": "") + "\tdb\t" + convert_string(token->value) + "\n"; // Add to data segment.
+                token->key + (add_suffix ? "_text": "") + "\tdb\t" + convert_string(token->value, null_terminated) + "\n"; // Add to data segment.
     }
     delete token; // Free the token.
 }
@@ -65,7 +67,7 @@ void Compiler::compile_element(IRElements::GlobalsIRElement *element) {
     while (!element->globals.empty()) {
         global_token = element->globals.front();
         element->globals.pop(); // Dequeue the element.
-        compile_element(global_token, false); // Compile the token.
+        compile_element(global_token, false, false); // Compile the token.
     }
 }
 
@@ -79,7 +81,7 @@ void Compiler::compile_element(IRElements::SectionIRElement *element) {
     auto *global_token = new Tokens::GlobalToken {Tokens::TokenType::GLOBAL, element->section_label->line,
                                                   element->section_label->location, element->section_label->label,
                                                   element->text}; // Convert to global token to reuse compile_element.
-    compile_element(global_token, true);
+    compile_element(global_token, true, element->element_type == IRElements::IRElementType::IMAGE_SECTION_IR_ELEMENT);
     this->labels_.insert(element->section_label->label); // Add the label to the labels set.
 }
 

@@ -60,8 +60,9 @@ namespace Florence::FSCompiler {
          * Compile a single global token to the data segment.
          * @param token Token to compile.
          * @param add_suffix: If true, globals have a _text added to their name.
+         * @param null_terminated: If true, global value strings are terminated with zero.
          */
-        void compile_element(Tokens::GlobalToken *token, bool add_suffix);
+        void compile_element(Tokens::GlobalToken *token, bool add_suffix, bool null_terminated);
 
         /**
          * Compile all sections.

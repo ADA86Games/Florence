@@ -52,12 +52,6 @@ draw_image:
 	mov	cl, al	; Get the display mode to cl.
 	pop	ax;
 	push	cx;
-	push	ax;
-
-	mov	al, 13h	; Switch to VGA graphics.
-	call	set_graphics_mode
-
-	pop	ax	; Restore ax.
 
 	mov     dx, ax
         mov     al, 00h ; Read file.
@@ -66,7 +60,8 @@ draw_image:
 
         push    ax
         mov     bx, ax  ; Get the file handle.
-        lea     dx, [screen_buffer] ; Set the screen buffer.
+        mov	cx, 64000	; Read 320x200 bytes.
+	lea     dx, [screen_buffer] ; Set the screen buffer.
         mov     ah, 3Fh ; Read data.
         int     21h
 
@@ -74,14 +69,21 @@ draw_image:
         mov     ah, 3Eh ; Close file.
         int     21h
  
-
+set_screen_buffer:
+	mov	al, 13h	; Switch to VGA graphics.
+	mov	ah, 00h	; Set grahpics mode.
+	int	10h
+	mov	ax, 0A000h	; Set the buffer start.
+	mov	es, ax
+	mov	bx, 0h	; Increment variable.
+	lea	di, [screen_buffer]
 write_screen:
         mov     al, [ds:di] ; Get the next pixel
         mov     byte[es:bx], al    ; Write pixel.
         inc     bx              ; Increment ax.
         inc     di
-        cmp     bx, 0f9ffH      ; Check if we wrote enough.
-        jge     write_screen_ret
+        cmp     bx, 0fa00h      ; Check if we wrote enough.
+        ja	write_screen_ret
         jmp     write_screen
 
 write_screen_ret:

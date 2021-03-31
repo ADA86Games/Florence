@@ -24,6 +24,7 @@ Ah, another label, if a label is the ending label, then, simply point to.
 [!choice_two]
 
 ; This will directly go to choice_one after we show a picture, you can add labels with images by using the ! character.
+; Make sure that the image name is less than 6 characters before the dot and three after the dot max.
 
-example.vga
+exmp.vga
 : exit
