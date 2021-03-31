@@ -9,18 +9,20 @@ const std::vector<std::string> std_lib {"../include/header.asm", "../include/ren
 namespace Florence::Linker {
     /**
      * Link the source codes of the files with the given filenames.
+     * @param path Path to installation directory.
      * @param source_code Source code to add the links.
      * @param filenames Filenames of the sources to link.
      * @return the linked source code.
      */
-    std::string link(const std::string & source_code, std::vector<std::string> filenames);
+    std::string link(const std::string &path, const std::string & source_code, std::vector<std::string> filenames);
 
     /**
      * Link the source code with just the standard library.
+     * @param path Path to installation directory.
      * @param source_code Source code to link.
      * @return The linked source code.
      */
-    std::string link(const std::string & source_code);
+    std::string link(const std::string &path, const std::string & source_code);
 }
 
 #endif //FLORENCE_LINKER_HPP
