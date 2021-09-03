@@ -10,8 +10,9 @@ namespace Florence::Assembler {
      * @param path Path to the binary.
      * @param input_filename Input filename.
      * @param output_filename Output filename.
+	 * @param is_debug: retains the temporary assembly file.
      */
-    void assemble(const std::string &input_filename, const std::string &output_filename);
+    void assemble(const std::string &input_filename, const std::string &output_filename, bool is_debug);
 }
 
 #endif //FLORENCE_ASSEMBLER_HPP
